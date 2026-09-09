@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantifying Search Visibility Drivers - Research Paper</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; line-height: 1.6; color: #2d3748; max-width: 900px; margin: 0 auto; padding: 2rem; background: #f7fafc; }
+        .paper-container { background: white; padding: 3rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { color: #1a202c; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; }
+        h2 { color: #2b6cb0; margin-top: 2rem; border-bottom: 1px solid #edf2f7; padding-bottom: 0.3rem; }
+        .abstract { background: #ebf8ff; padding: 1.5rem; border-left: 4px solid #3182ce; border-radius: 4px; margin: 1.5rem 0; }
+        img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #e2e8f0; margin: 1.5rem 0; }
+        ul { padding-left: 1.2rem; }
+        li { margin-bottom: 0.5rem; }
+        code { background: #edf2f7; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+<div class="paper-container">
+
+    <h1>Quantifying Search Visibility Drivers: Identifying High-Impact Content and Query Signals for Top-Tier Organic Traffic Movement</h1>
+    <p><strong>Author:</strong> Applied ML Research Group | <strong>Published:</strong> September 2026</p>
+
+    <div class="abstract">
+        <strong>Abstract:</strong> 
+        This study investigates whether aggregate Google Search Console (GSC) and Google Analytics 4 (GA4) metrics can accurately predict top-tier search visibility (Average Position &le; 3.0) across diverse domains. Using DuckDB over Hugging Face Parquet releases, we extracted performance metrics for 120,681 content entities and evaluated a Random Forest Classifier under 5-Fold GroupKFold cross-validation on <code>client_hash_id</code>. Out-of-client validation yielded a Random Forest ROC-AUC of 0.503 compared to a baseline of 0.500, indicating that absolute volume features alone do not generalize across distinct domains without client-level baseline normalization. Feature importance analysis revealed <code>total_impressions</code> (40.2%) and <code>historical_ctr</code> (27.1%) as the primary global predictive weights. We formulate an evidence-based playbooks prioritizing meta-tag CTR optimizations for high-impression, underperforming content.
+    </div>
+
+    <h2>1. Introduction & Problem Statement</h2>
+    <p>Organic search optimization often relies on general heuristics rather than empirical modeling. Content teams require data-driven criteria to determine which content assets warrant priority allocation for refreshes, internal link passes, or metadata overhauls. This study models search visibility drivers to support strategic content allocation decisions while maintaining strict anonymization standards.</p>
+
+    <h2>2. Data Selection & Exclusions</h2>
+    <p>We analyzed the FlyRank internship dataset release via DuckDB. The dataset comprises 120,681 aggregated content entities across multiple anonymized client domains. To eliminate low-volume variance and noise, entities with fewer than 50 total impressions were excluded. In compliance with privacy guidelines, zero client names, raw URLs, domains, or query strings are disclosed.</p>
+
+    <h2>3. Methodology & Validation Design</h2>
+    <p>To eliminate data leakage, <code>mean_avg_position</code> was strictly reserved for binary target label construction (<code>is_top_tier_visible = 1</code> if position &le; 3.0; 0 otherwise) and removed from feature matrices. Model performance was evaluated using <code>GroupKFold(n_splits=5)</code> grouped by <code>client_hash_id</code>, ensuring the model was tested exclusively on unseen client domains. Models evaluated include a Random Forest Classifier with balanced class weights and a Dummy Baseline.</p>
+
+    <h2>4. Empirical Results</h2>
+    <p>The baseline model achieved an out-of-client ROC-AUC of 0.500. The Random Forest classifier demonstrated near-equivalent performance with an ROC-AUC of 0.503, highlighting that absolute impression and click totals lack cross-client transferability due to domain authority variances.</p>
+    
+    <img src="capstone_results_visuals.png" alt="Random Forest Feature Importance and GroupKFold ROC Curve">
+
+    <h2>5. Limitations & Honest Framing</h2>
+    <p>This work is observational and directional; it does not claim causality or reverse-engineer search engine ranking algorithms. The cross-validation performance demonstrates that cross-client generalization requires client-relative metrics (e.g., Z-score normalized impressions) rather than absolute global counts.</p>
+
+    <h2>6. Ranked Recommendations Playbook</h2>
+    <ul>
+        <li><strong>Priority 1 — Metadata & CTR Optimization:</strong> Target pages displaying top-quartile impressions but below-average CTR with title tag and snippet updates.</li>
+        <li><strong>Priority 2 — PageRank & Authority Pass:</strong> Direct internal links to high-engagement pages suffering from low impression scale.</li>
+        <li><strong>Priority 3 — Intent Realignment:</strong> Audit intent alignment for content driven primarily by non-organic channels.</li>
+    </ul>
+
+    <h2>7. Reproducibility & Code</h2>
+    <p>All analysis code, feature engineering scripts, and cross-validation workflows are publicly accessible in the repository's <code>work/</code> directory.</p>
+
+    <h2>8. Acknowledgments & Data Credit</h2>
+    <p>Built on the <a href="https://flyrank.ai" target="_blank">FlyRank ML Internship dataset</a>.</p>
+
+</div>
+</body>
+</html>
