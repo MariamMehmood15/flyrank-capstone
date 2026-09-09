@@ -8,7 +8,7 @@ This repository contains the end-to-end data processing, feature engineering, an
 * **Lane**: Ranking Signal Analysis (Predicting Top-Tier Search Visibility)
 * **Dataset**: FlyRank Internship Warehouse (Gated Hugging Face Parquet releases)
 * **Goal**: Identify key content performance signals, evaluate cross-client model generalization, and formulate data-backed SEO optimization playbooks.
-* **Key Findings**: Out-of-client cross-validation yielded a Random Forest ROC-AUC of 0.503 against a 0.500 baseline, proving that absolute performance volumes require domain-level baseline normalization to generalize across distinct clients.
+* **Key Findings**: Out-of-client cross-validation yielded a Random Forest ROC-AUC of 0.503 against a 0.500 baseline, indicating that absolute performance volumes do not generalize well across distinct clients and motivating client-relative normalization.
 
 ---
 
